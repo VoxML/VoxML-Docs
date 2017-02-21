@@ -1,0 +1,2166 @@
+
+\documentclass[10pt, a4paper]{article}
+%\usepackage{starsem2014}
+%\usepackage{acl-ijcnlp2009}
+%\usepackage{lrec2016}
+%\usepackage{multibib}
+\usepackage{times}
+\usepackage{lingstyle}
+\usepackage{graphicx,epsfig,color}
+\usepackage{epstopdf}
+%\usepackage{colacl}
+%\usepackage{subfigure}
+\usepackage[latin1]{inputenc}
+
+% Other packages
+\usepackage{float}
+\usepackage{amssymb}
+%\usepackage{cancel}
+%\usepackage{lingstyle}
+\usepackage{color}
+\usepackage{graphicx,epsfig,color}
+\usepackage{epstopdf}
+\definecolor{darkblue}{rgb}{0,0,0.8}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{darkred}{rgb}{0.8,0,0}
+\definecolor{brown}{rgb}{0.5,0.3,0}
+\newcommand{\cartoon}[1]{{\medskip\noindent\fbox{#1}\medskip}}
+\input cup-macros.tex
+
+\begin{document}
+
+\section{Notes}
+
+The following notations may be used within VoxML specifications to structure voxeme instances, subject to the definitions below.
+
+\begin{itemize}
+\item $\mathcal{E}$ --- the minimal embedding space (MES)
+\item $\mathcal{E}_A$ --- the axis $A$ of the MES
+\item $loc(x)$ --- location of object $x$
+\item $orient(x)$ --- orientation of object $x$
+\item $vec(A)$ --- vector denoted by (positive unless otherwise specified) axis $A$
+\item $opp(v)$ --- opposite vector of $v$
+\item $reify(x,s)$ --- relabel object $x$ (can be a collection (c$_1$,...,c$_n$)) as symbol s
+\item $interior(x)$ --- the interior surface (and volumetric enclosed space) of object $x$
+\item $exterior(x)$ --- the exterior surface of object $x$
+\item $dimension(x)$ --- the number of dimensions defining entity $x$
+\item $while(c,e)$ --- operation $e$ is executed as long as condition $c$ is true
+\item $for(x \in y)$ --- following operation is executed for each element $x$ in collection $y$
+\item $def(x,y)$ --- defines $y$ as the value of $x$
+\item $as(i)$ --- comparator, returns input $i$ as generic symbol
+\item $align(A,B)$ -- defines vector $A$ as aligned (parallel) with vector $B$
+\end{itemize}
+
+\section{Templates}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{OBJECT}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{...}}\\
+                 \attvaltyp{type}{...}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{...}\\
+		\attvaltyp{components}{...}\\
+		\attvaltyp{concavity}{...}\\
+		\attvaltyp{rotatSym}{$\{...\}$}\\
+		\attvaltyp{reflectSym}{$\{...\}$}\\
+		\attvaltyp{constr}{$\{...\}$}
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{...
+			%\avmplus{
+			%	\attvaltyp{...}{...}\\
+			%}
+		}\\
+		\attval{Extr}{...} 
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_n$}{$H_{[\#]} \rightarrow [E(a_{1..n})]R(a_{1..n})$ }
+		%\attvaltyp{A$_n$}{$H_{[\#]} \rightarrow [E(a_{1..n})]R(a_{1..n})$ }
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{...}\\
+		\attvaltyp{movable}{...}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{objecttemplate}}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc type} & {\tt physobj, artifact} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc head} & {\tt prismatoid, pyramid, wedge,} \\
+& {\tt parallelepiped, cupola,} \\
+& {\tt frustum, cylindroid, ellipsoid,} \\
+& {\tt hemiellipsoid, bipyramid,} \\
+& {\tt rectangular\_prism, toroid,} \\
+& {\tt sheet} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc concavity} & {\tt convex, flat, concave} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc rotatSym} & {\tt X, Y, Z} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc reflSym} & {\tt XY, XZ, YZ} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc afford\_str} & Following the axiom/convention that agents of a VoxML program \\
+& must be explicitly singled out in the associated implementation \\
+& (by belonging to certain entity classes, e.g. humans), affordances \\
+& describe what {\it can be done} to the VoxML {\sc object}, and not what \\
+& actions it {\it itself} can perform as the agent (cite Gibson 1977?).  Thus \\
+& a VoxML affordance formula may be read as follows: \\
+& HABITAT $\rightarrow$ [EVENT]RESULT, where EVENT should be able to be \\
+& represented as an unaccusative verb in middle or passive voice whereas \\
+& RESULT should be a stative in the active voice. \\
+& \\
+& Examples: \\
+& $H_{[2]} \rightarrow [put(x, on[1])]support([1], x)$ can be paraphrased as \\
+& ``In habitat 2, $x$ can be put on component 1, which results in component \\
+& 1 supporting $x$" \\
+& $H_{[3]} \rightarrow [grasp(x, [1])]$ can be paraphrased as ``In habitat 3, component \\
+& 1 can be grasped by $x$" \\
+& $H_{[4]},grasp(x, [1]) \rightarrow [lift(x, [1])]$ can be paraphrased as ``In habitat 4, \\
+& if $x$ is grasping component 1, component 1 can be lifted by $x$" \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc scale} & {\tt $<$agent, agent $>$agent} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc movable} & {\tt true, false} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc density} & {\tt 1..7} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{PROGRAM}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{...}}\\
+		\attvaltyp{type}{...}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{...}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:a}$}
+			%\attvaltyp{a$_1$}{$\mbox{y:a}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_n$}{$E(a_{1..n})$}
+			%\attvaltyp{e$_n$}{$E(a_{1..n})$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{programtemplate}}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc type} & {\tt process, transition\_event} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc head} & {\tt state, process, transition,} \\
+& {\tt assignment, test} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{ATTRIBUTE}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{...}}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{scale}{...}\\
+		\attvaltyp{arity}{...}\\
+		\attvaltyp{arg}{$\mbox{x:a}$}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{attrtemplate}}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc scale} & {\tt nominal, binary, ordinal,} \\
+& {\tt interval, rational} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc arity} & {\tt intransitive, transitive} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{RELATION}\\
+	\attval{lex}{\avmplus{	
+		\attvaltyp{pred}{\mbox{...}}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{class}{...}\\
+		\attvaltyp{value}{...}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_n$}{$\mbox{x:...}$}
+			%\attvaltyp{a$_n$}{$\mbox{y:...}$}
+		}}\\
+		\attvaltyp{constr}{...}
+
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{reltemplate}}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc class} & {\tt config, force\_dynamic} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc value} & {\tt values of QSR calculus in use} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{FUNCTION}\\
+	\attval{lex}{\avmplus{	
+		\attvaltyp{pred}{\mbox{...}}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{arg}{\mbox{x:a}}\\
+		\attvaltyp{referent}{\mbox{x$\rightarrow${\sc ...}}}\\
+		\attvaltyp{mapping}{\mbox{f(n):R}}\\
+	\attval{orientation}{\avmplus{
+		\attvaltyp{space}{$\mbox{...}$}\\
+		\attvaltyp{axis}{$\mbox{...}$}\\
+		\attvaltyp{arity}{\mbox{a($\rightarrow${\sc param)*[$bool(p)$]:$condition$}}}
+			%\attvaltypnoatt{$\;$}{}\\
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{functemplate}}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc space} & {\tt world, object, pov} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc axis} & {\tt +X, -X, +Y, -Y, +Z, -Z} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\section{Thesis Test Set}
+
+\subsection{Objects}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{block}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{block}}\\
+                 \attvaltyp{type}{physobj, artifact}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{rectangular\_prism[1]}\\
+		\attvaltyp{components}{nil}\\
+		\attvaltyp{concavity}{flat}\\
+		\attvaltyp{rotatSym}{$\{X,Y,Z\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,XZ,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[2]
+			\avmplus{
+				\attvaltyp{constr}{$\{X = Y + Z\}$}
+			}
+		}\\
+		\attval{Extr}{...} 
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H_{[2]}\rightarrow[put(x, on([1]))]support([1], x)$}\\
+		\attvaltyp{A$_3$}{$H_{[2]}\rightarrow[grasp(x, [1])]hold(x, [1])$}\\
+		\attvaltyp{A$_4$}{$H_{[2]}\rightarrow[slide(x, [1])]H_{[2]}$}
+		%\attvaltyp{A$_3$}{$H_{[2]}\rightarrow[grasp(x, [1])]$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{block}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{ball}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{ball}}\\
+                 \attvaltyp{type}{physobj, artifact}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{ellipsoid[1]}\\
+		\attvaltyp{components}{nil}\\
+		\attvaltyp{concavity}{convex}\\
+		\attvaltyp{rotatSym}{$\{X,Y,Z\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,XZ,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{...}\\
+		\attval{Extr}{...}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H \rightarrow [grasp(x, [1])]$}\\
+		\attvaltyp{A$_2$}{$H \rightarrow [hold(x, [1])]lift(x, [1])$}\\
+		\attvaltyp{A$_3$}{$H \rightarrow [roll(x, [1])]$}\\
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{ball}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{plate}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{plate}}\\
+                 \attvaltyp{type}{physobj, artifact}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{sheet[1]}\\
+		\attvaltyp{components}{base, surface[1]}\\
+		\attvaltyp{concavity}{concave}\\
+		\attvaltyp{rotatSym}{$\{Y\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[2]
+			\avmplus{
+				\attvaltyp{constr}{$\{Y \ll X, Y \ll Z\}$}\\
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{Y})$}\\
+		       		\attvaltyp{top}{$top(+Y)$} 
+			}
+		}\\
+		\attval{Extr}{[3]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{\bot Y})$}
+			}
+		}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H_{[2]}\rightarrow[put(x, on([1]))]support([1], x)$}\\
+		\attvaltyp{A$_2$}{$H_{[2]}\rightarrow[put(x, in([1]))]contain([1], x)$}\\
+		%\attvaltyp{A$_3$}{$H_{[2]}\rightarrow[grasp(x, [1])]$}\\
+		\attvaltyp{A$_3$}{$H_{[2]}\rightarrow[grasp(x, [1])]hold(x, [1])$}\\
+		\attvaltyp{A$_4$}{$H_{[2]}\rightarrow[slide(x, [1])]H_{[2]}$}\\
+		\attvaltyp{A$_5$}{$H_{[3]}\rightarrow[roll(x, [1])]H_{[3]}$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{plate}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{cup}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{cup}}\\
+                 \attvaltyp{type}{physobj, artifact}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{cylindroid[1]}\\
+		\attvaltyp{components}{surface, interior}\\
+		\attvaltyp{concavity}{concave}\\
+		\attvaltyp{rotatSym}{$\{Y\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[2]
+			\avmplus{
+				\attvaltyp{constr}{$\{Y > X, Y > Z\}$}\\
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{Y})$}\\
+		       		\attvaltyp{top}{$top(+Y)$} 
+			}
+		}\\
+		\attval{Extr}{[3]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{\bot Y})$}
+			}
+		}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H_{[2]}\rightarrow[put(x, on([1]))]support([1], x)$}\\
+		\attvaltyp{A$_2$}{$H_{[2]}\rightarrow[put(x, in([1]))]contain([1], x)$}\\
+		\attvaltyp{A$_3$}{$H_{[2]}\rightarrow[grasp(x, [1])]$}\\
+		\attvaltyp{A$_4$}{$H_{[3]}\rightarrow [roll(x, [1])]$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{cup}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{disc}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{disc}}\\
+                 \attvaltyp{type}{physobj, artifact}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{cylindroid[1]}\\
+		\attvaltyp{components}{nil}\\
+		\attvaltyp{concavity}{flat}\\
+		\attvaltyp{rotatSym}{$\{Y\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[2]
+			\avmplus{
+				\attvaltyp{constr}{$\{X > Y, Z > Y\}$}
+			}
+		}\\
+		\attval{Extr}{ 
+			\avmplus{[3]
+				\avmplus{
+					\attvaltyp{constr}{$\{X([1]) \geqslant X(y:physobj),$}\\
+					\attvaltypnoatt{\;}{$Z([1]) \geqslant Z(y:physobj)\}$}
+				}\\
+				{[4]
+				\avmplus{
+					\attvaltyp{up}{$align(Y,\mathcal{E}_{\bot Y})$}
+				}}
+			}
+		}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H_{[2]}\rightarrow [grasp(x, [1])]$}\\
+		\attvaltyp{A$_2$}{$H_{[3]}\rightarrow [put([1],on(y)]close([1],y)$}\\
+		\attvaltyp{A$_4$}{$H_{[4]}\rightarrow [roll(x, [1])]$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{disc}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{spoon}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{spoon}}\\
+                 \attvaltyp{type}{physobj, artifact}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{sheet[1]}\\
+		\attvaltyp{components}{handle[2], bowl[3]}\\
+		\attvaltyp{concavity}{concave}\\
+		\attvaltyp{rotatSym}{$nil$}\\
+		\attvaltyp{reflectSym}{$\{YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[4]
+			\avmplus{
+				\attvaltyp{constr}{$\{Z > X, Z \gg Y\}$}\\
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{Y})$}\\
+				\attvaltyp{front}{$top(+Y)$}
+			}
+		}\\
+		\attval{Extr}{[5]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{\bot Y})$}
+			}
+		} 
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H_{[4]} \rightarrow [put(x, in([3]))]contain([3], x)$}\\
+		\attvaltyp{A$_2$}{$H_{[4]} \rightarrow [grasp(x, [2])]$}\\
+		\attvaltyp{A$_1$}{$H_{[4]} \rightarrow [put([1], in(x))]contain(x, [1])$}\\
+		\attvaltyp{A$_1$}{$H_{[5]},contain(x, [1]) \rightarrow [stir([1], x)]$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{spoon}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{book}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{book}}\\
+                 \attvaltyp{type}{physobj, artifactj}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{rectangular\_prism[1]}\\
+		\attvaltyp{components}{cover[2]+,  page[3]+}\\
+		\attvaltyp{concavity}{flat}\\
+		\attvaltyp{rotatSym}{nil}\\
+		\attvaltyp{reflectSym}{$\{XY\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[4]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{Y})$}\\
+		       		\attvaltyp{top}{$front(+Y)$}
+			}
+		}\\
+		\attval{Extr}{...}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H \rightarrow [grasp(x, [2]),$}\\
+			\attvaltypnoatt{\;}{$move(x, [2], away(from([3])))]open(x, [1])$}\\
+		\attvaltyp{A$_2$}{$H \rightarrow [grasp(x, [2]),$}\\
+			\attvaltypnoatt{\;}{$move(x, [2], toward([3]))]close(x, [1])$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{book}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{blackboard}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{blackboard}}\\
+                 \attvaltyp{type}{physobj, artifactj}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{sheet[1]}\\
+		\attvaltyp{components}{board,  surface[1], back, leg[2]+}\\
+		\attvaltyp{concavity}{flat}\\
+		\attvaltyp{rotatSym}{nil}\\
+		\attvaltyp{reflectSym}{$\{YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[3]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{Y})$}\\
+		       		\attvaltyp{top}{$top(+Y)$}\\
+				\attvaltyp{up}{$align(Z,\mathcal{E}_{Z})$}\\
+		       		\attvaltyp{top}{$front(+Z)$}\\
+				\attvaltyp{constr[2]}{$\{Y \gg X, Y \gg Z\}$} 
+			}
+		}\\
+		\attval{Extr}{...}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H \rightarrow [grasp(x, [1])]$}\\
+		\attvaltyp{A$_1$}{$H_{[3]} \rightarrow [write(x, on([1])]$}\\
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{blackboard}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{bottle}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{bottle}}\\
+                 \attvaltyp{type}{physobj, artifact}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{cylindroid[1]}\\
+		\attvaltyp{components}{surface, interior}\\
+		\attvaltyp{concavity}{concave}\\
+		\attvaltyp{rotatSym}{$\{Y\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[2]
+			\avmplus{
+				\attvaltyp{constr}{$\{Y > X, Y > Z\}$}\\
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{Y})$}\\
+		       		\attvaltyp{top}{$top(+Y)$} 
+			}
+		}\\
+		\attval{Extr}{[3]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{\bot Y})$}
+			}
+		}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H_{[2]}\rightarrow[put(x, on([1]))]support([1], x)$}\\
+		\attvaltyp{A$_2$}{$H_{[2]}\rightarrow[put(x, in([1]))]contain([1], x)$}\\
+		\attvaltyp{A$_3$}{$H_{[2]}\rightarrow[grasp(x, [1])]$}\\
+		\attvaltyp{A$_4$}{$H_{[3]}\rightarrow [roll(x, [1])]$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{bottle}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{grape}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{grape}}\\
+                 \attvaltyp{type}{physobj}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{ellipsoid[1]}\\
+		\attvaltyp{components}{fruit[1]}\\
+		\attvaltyp{concavity}{flat}\\
+		\attvaltyp{rotatSym}{$\{Y\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{...}\\
+		\attval{Extr}{[2]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{\bot Y})$}
+			}
+		}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H\rightarrow [grasp(x, [1])]$}\\
+		\attvaltyp{A$_1$}{$H\rightarrow [hold(x, [1])]lift(x, [1])$}\\
+		\attvaltyp{A$_1$}{$H\rightarrow [slide(x, [1])]$}\\
+		\attvaltyp{A$_1$}{$H_{[2]}\rightarrow [roll(x, [1])]$}\\
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{grape}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{apple}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{apple}}\\
+                 \attvaltyp{type}{physobj}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{ellipsoid[1]}\\
+		\attvaltyp{components}{fruit[1], stem, leaf}\\
+		\attvaltyp{concavity}{flat}\\
+		\attvaltyp{rotatSym}{$\{Y\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{...}\\
+		\attval{Extr}{[2]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{\bot Y})$}
+			}
+		}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H\rightarrow [grasp(x, [1])]$}\\
+		\attvaltyp{A$_1$}{$H\rightarrow [hold(x, [1])]lift(x, [1])$}\\
+		\attvaltyp{A$_1$}{$H\rightarrow [slide(x, [1])]$}\\
+		\attvaltyp{A$_1$}{$H_{[2]}\rightarrow [roll(x, [1])]$}\\
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{apple}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{banana}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{banana}}\\
+                 \attvaltyp{type}{physobj}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{cylindroid[1]}\\
+		\attvaltyp{components}{fruit[1], stem}\\
+		\attvaltyp{concavity}{convex}\\
+		\attvaltyp{rotatSym}{$\{Y\}$}\\
+		\attvaltyp{reflectSym}{$\{YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{...}\\
+		\attval{Extr}{[2]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{\bot Y})$}
+			}
+		}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_3$}{$H \rightarrow [grasp(x, [1])]$}\\
+		\attvaltyp{A$_3$}{$H \rightarrow [hold(x, [1])]lift(x, [1])$}\\
+		\attvaltyp{A$_4$}{$H_{[2]} \rightarrow [slide(x, [1])]$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{banana}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{table}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{table}}\\
+                 \attvaltyp{type}{physobj, artifactj}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{sheet[1]}\\
+		\attvaltyp{components}{surface[1],  leg[2]+}\\
+		\attvaltyp{concavity}{flat}\\
+		\attvaltyp{rotatSym}{$\{Y\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[3]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{Y})$}\\
+		       		\attvaltyp{top}{$top(+Y)$}\\
+				\attvaltyp{constr[1]}{$\{Y \ll X, Y \ll Z\}$}\\
+				\attvaltyp{constr[2]}{$\{Y \gg X, Y \gg Z\}$} 
+			}
+		}\\
+		\attval{Extr}{...}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H\rightarrow [grasp(x, [1])]$}\\
+		\attvaltyp{A$_1$}{$H\rightarrow [hold(x, [1])]lift(x, [1])$}\\
+		\attvaltyp{A$_1$}{$H\rightarrow [slide(x, [1])]$}\\
+		\attvaltyp{A$_1$}{$H_{[2]}\rightarrow [roll(x, [1])]$}\\
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{table}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{bowl}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{bowl}}\\
+                 \attvaltyp{type}{physobj, artifact}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{cylindroid[1]}\\
+		\attvaltyp{components}{base, interior}\\
+		\attvaltyp{concavity}{concave}\\
+		\attvaltyp{rotatSym}{$\{Y\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[2]
+			\avmplus{
+				\attvaltyp{constr}{$\{Y < X, Y < Z\}$}\\
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{Y})$}\\
+		       		\attvaltyp{top}{$top(+Y)$} 
+			}
+		}\\
+		\attval{Extr}{[3]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{\bot Y})$}
+			}
+		}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H_{[2]}\rightarrow[put(x, on([1]))]support([1], x)$}\\
+		\attvaltyp{A$_2$}{$H_{[2]}\rightarrow[put(x, in([1]))]contain([1], x)$}\\
+		\attvaltyp{A$_3$}{$H_{[2]}\rightarrow[grasp(x, [1])]$}\\
+		\attvaltyp{A$_3$}{$H_{[2]}\rightarrow[grasp(x, [1])]lift(x, [1])$}\\
+		\attvaltyp{A$_3$}{$H_{[2]}\rightarrow[slide(x, [1])]$}\\
+		\attvaltyp{A$_3$}{$H_{[3]}\rightarrow[roll(x, [1])]$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{bowl}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{knife}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{knife}}\\
+                 \attvaltyp{type}{physobj, artifact}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{rectangular\_prism[1]}\\
+		\attvaltyp{components}{handle[2], blade}\\
+		\attvaltyp{concavity}{flat}\\
+		\attvaltyp{rotatSym}{$nil$}\\
+		\attvaltyp{reflectSym}{$\{XY\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[3]
+			\avmplus{
+				\attvaltyp{constr}{$\{X > Y, X \gg Z\}$}\\
+				\attvaltyp{front}{$front(+X)$}
+			}
+		}\\
+		\attval{Extr}{...} 
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H_{[3]}\rightarrow [grasp(x, [1])]$}\\
+		\attvaltyp{A$_2$}{$H_{[3]}\rightarrow [grasp(x, [2])\rightarrow grasp(x, [1])]$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{knife}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{pencil}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{pencil}}\\
+                 \attvaltyp{type}{physobj, artifact}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{cylindroid[1]}\\
+		\attvaltyp{components}{shaft[1], eraser, nib}\\
+		\attvaltyp{concavity}{convex}\\
+		\attvaltyp{rotatSym}{$\{Z\}$}\\
+		\attvaltyp{reflectSym}{$\{XZ,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[4]
+			\avmplus{
+				\attvaltyp{constr}{$\{Y \ll X, Y \ll Z\}$}\\
+				\attvaltyp{forward}{$align(Z,\mathcal{E}_{Z})$}\\
+		       		\attvaltyp{front}{$front(+Z)$} 
+			}
+		}\\
+		\attval{Extr}{[5]
+			\avmplus{
+				\attvaltyp{forward}{$align(Z,\mathcal{E}_{\bot Y})$}
+			}
+		}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_3$}{$H_{[4]} \rightarrow [grasp(x, [1])]$}\\
+		\attvaltyp{A$_3$}{$H_{[4]} \rightarrow [hold(x, [1])]lift(x, [1])$}\\
+		\attvaltyp{A$_4$}{$H_{[5]} \rightarrow [roll(x, [1])]$}
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{pencil}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{paper sheet}\\
+	\attval{lex}{\avmplus{	      
+		\attvaltyp{pred}{\mbox{paper\_sheet}}\\
+                 \attvaltyp{type}{physobj, artifactj}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{sheet[1]}\\
+		\attvaltyp{components}{nil}\\
+		\attvaltyp{concavity}{flat}\\
+		\attvaltyp{rotatSym}{$\{Y\}$}\\
+		\attvaltyp{reflectSym}{$\{XY,YZ\}$}\\
+	}}\\
+	\attval{habitat}{\avmplus{
+        		\attval{Intr}{[2]
+			\avmplus{
+				\attvaltyp{up}{$align(Y,\mathcal{E}_{Y})$}\\
+		       		\attvaltyp{top}{$top(+Y)$}\\
+				\attvaltyp{constr}{$\{Y \ll X, Y \ll Z\}$}\\
+			}
+		}\\
+		\attval{Extr}{...}
+	}}\\
+	\attval{afford\_str}{\avmplus{
+		\attvaltyp{A$_1$}{$H_{[2]} \rightarrow [grasp(x, [1])]$}\\
+		\attvaltyp{A$_1$}{$H_{[2]} \rightarrow [hold(x, [1])]lift(x, [1])$}\\
+		\attvaltyp{A$_1$}{$H_{[2]} \rightarrow [slide(x, [1])]$}\\
+	}}\\
+	\attval{embodiment}{\avmplus{
+		\attvaltyp{scale}{$<$agent}\\
+		\attvaltyp{movable}{true}
+		%\attvaltyp{density}{...}
+	}}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{paper sheet}}
+\subsection{Programs}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{grasp}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{grasp}}\\
+		\attvaltyp{type}{transition\_event}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{transition}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{grasp}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{hold}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{hold}}\\
+		\attvaltyp{type}{state}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{state}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$maintain\_rel(x,y)$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{hold}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{touch}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{touch}}\\
+		\attvaltyp{type}{transition\_event}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{transition}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$\neg EC(x,y) \rightarrow move(x,toward(y))$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{touch}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{move}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{move}}\\
+		\attvaltyp{type}{process}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{process}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),move(x,y)]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{move}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{turn}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{turn}}\\
+		\attvaltyp{type}{process}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{process}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),rotate(y)]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{turn}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{roll}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{roll}}\\
+		\attvaltyp{type}{process}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{process}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}\\
+			\attvaltyp{a$_3$}{$\mbox{z:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),$}\\
+				\attvaltypnoatt{\;}{$while(EC(y,z),translocate(x,y),rotate(x,y)))]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{roll}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{slide}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{slide}}\\
+		\attvaltyp{type}{process}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{process}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}\\
+			\attvaltyp{a$_3$}{$\mbox{z:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),$}\\
+				\attvaltypnoatt{\;}{$while(EC(y,z),move(x,y)))]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{slide}}
+
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{push}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{push}}\\
+		\attvaltyp{type}{process}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{process}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}\\
+			\attvaltyp{a$_3$}{$\mbox{z:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),$}\\
+				\attvaltypnoatt{\;}{$while(EC(y,z),move(x,y)))]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{slide}}
+
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{spin}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{spin}}\\
+		\attvaltyp{type}{process}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{process}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$rotate(x,y)$}\\
+			\attvaltyp{e$_3$}{$ungrasp(x,y)$}\\
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{spin}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{lift}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{lift}}\\
+		\attvaltyp{type}{process}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{process}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),move(x,y,vec(\mathcal{E}_Y))))]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{lift}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{stack}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{stack}}\\
+		\attvaltyp{type}{transition\_event}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{transition}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y[]:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$def(y[0],as(z)),for(o \in y[1..n])$}\\
+				\attvaltypnoatt{\;}{$[put(o, on(z)), reify((z,o),as(z)]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{stack}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{put}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{put}}\\
+		\attvaltyp{type}{transition\_event}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{transition}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}\\
+			\attvaltyp{a$_3$}{$\mbox{z:location}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),move(x,y)]$}\\
+			\attvaltyp{e$_3$}{$[at(y,z) \rightarrow ungrasp(x,y)]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{put}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{lean}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{lean}}\\
+		\attvaltyp{type}{transition\_event}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{transition}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}\\
+			\attvaltyp{a$_3$}{$\mbox{z:location}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),rotate(x,y)]$}\\
+			\attvaltyp{e$_3$}{$[support(y,z) \rightarrow ungrasp(x,y)]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{lean}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{flip}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{flip}}\\
+		\attvaltyp{type}{transition\_event}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{transition}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$def(w,as(orient(y)))[grasp(x,y)]$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),rotate(x,y)]$}\\
+			\attvaltyp{e$_3$}{$[(orient(y) = opp(w)) \rightarrow ungrasp(x,y)]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{flip}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{close}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{close}}\\
+		\attvaltyp{type}{transition\_event}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{transition}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),move(x,y))]$}\\
+			\attvaltyp{e$_3$}{$[DC(interior(y),\mathcal{E}) \rightarrow ungrasp(x,y)]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{close}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{open}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{open}}\\
+		\attvaltyp{type}{transition\_event}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{transition}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$grasp(x,y)$}\\
+			\attvaltyp{e$_2$}{$[while(hold(x,y),move(x,y))]$}\\
+			\attvaltyp{e$_3$}{$[EC(interior(y),\mathcal{E}) \rightarrow ungrasp(x,y)]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{open}}
+
+\subsection{Relations}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{on}\\
+	\attval{lex}{\avmplus{	
+		\attvaltyp{pred}{\mbox{on}}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{class}{config}\\
+		\attvaltyp{value}{EC}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:3D}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:3D}$}
+		}}\\
+		\attvaltyp{constr}{y$\rightarrow${\sc habitat}$\rightarrow${\sc intr}[$align$]}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{on}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{in}\\
+	\attval{lex}{\avmplus{	
+		\attvaltyp{pred}{\mbox{in}}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{class}{config}\\
+		\attvaltyp{value}{PO $\|$ TPP $\|$ NTPP}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:3D}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:3D}$}
+		}}\\
+		\attvaltyp{constr}{y$\rightarrow${\sc habitat}$\rightarrow${\sc intr}[$align$]?}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{in}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{against}\\
+	\attval{lex}{\avmplus{	
+		\attvaltyp{pred}{\mbox{against}}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{class}{force\_dynamic}\\
+		\attvaltyp{value}{EC}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:3D}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:3D}$}
+		}}\\
+		\attvaltyp{constr}{nil}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{against}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{at}\\
+	\attval{lex}{\avmplus{	
+		\attvaltyp{pred}{\mbox{at}}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{class}{config}\\
+		\attvaltyp{value}{DC $\|$ EC}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:3D}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:3D}$}
+		}}\\
+		\attvaltyp{constr}{$dist(x,y) < \epsilon$}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{at}}
+
+\subsection{Functions}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{edge}\\
+	\attval{lex}{\avmplus{	
+		\attvaltyp{pred}{\mbox{edge}}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{arg}{\mbox{x:physobj}}\\
+		\attvaltyp{referent}{\mbox{x$\rightarrow${\sc head}}}\\
+		\attvaltyp{mapping}{\mbox{dimension(n):1}}\\
+	\attval{orientation}{\avmplus{
+		\attvaltyp{space}{$\mbox{object}$}\\
+		\attvaltyp{axis}{$\mbox{ref:after}$}\\
+		\attvaltyp{arity}{\mbox{x$\rightarrow${\sc habitat}$\rightarrow$}}\\
+			\attvaltypnoatt{$\;$}{{\sc intr}[$axis$]}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{edge}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{center}\\
+	\attval{lex}{\avmplus{	
+		\attvaltyp{pred}{\mbox{center}}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{arg}{\mbox{x:physobj}}\\
+		\attvaltyp{referent}{\mbox{x$\rightarrow${\sc head}}}\\
+		\attvaltyp{mapping}{\mbox{dimension(n):0}}\\
+	\attval{orientation}{\avmplus{
+		\attvaltyp{space}{$\mbox{object}$}\\
+		\attvaltyp{axis}{$\mbox{nil}$}\\
+		\attvaltyp{arity}{\mbox{$intransitive$}}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{center}}
+
+\section{General Voxeme List}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{top}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{top}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x$\rightarrow${\sc Head}}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n-1}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{world}$}\\
+		       \attvaltyp{axis}{$\mbox{+Y}$}\\
+		       \attvaltyp{arity}{\mbox{x$\rightarrow${\sc Habitat}$\rightarrow$}}\\
+		       \attvaltypnoatt{$\;$}{\sc Intr[$top(axis)$]:}\\
+		       \attvaltypnoatt{$\;$}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{top}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{bottom}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{bottom}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x$\rightarrow${\sc Head}}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n-1}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{world}$}\\
+		       \attvaltyp{axis}{$\mbox{-Y}$}\\
+		       \attvaltyp{arity}{\mbox{x$\rightarrow${\sc Habitat}$\rightarrow$}}\\
+		       \attvaltypnoatt{$\;$}{\sc Intr[$bottom(axis)$]:}\\
+		       \attvaltypnoatt{$\;$}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{bottom}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{front}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{front}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x$\rightarrow${\sc Head}}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n-1}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{world}$}\\
+		       \attvaltyp{axis}{$\mbox{+Z}$}\\
+		       \attvaltyp{arity}{\mbox{x$\rightarrow${\sc Habitat}$\rightarrow$}}\\
+		       \attvaltypnoatt{$\;$}{\sc Intr[$front(axis)$]:}\\
+		       \attvaltypnoatt{$\;$}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{front}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{back}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{back}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x$\rightarrow${\sc Head}}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n-1}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{world}$}\\
+		       \attvaltyp{axis}{$\mbox{-Z}$}\\
+		       \attvaltyp{arity}{\mbox{x$\rightarrow${\sc Habitat}$\rightarrow$}}\\
+		       \attvaltypnoatt{$\;$}{\sc Intr[$back(axis)$]:}\\
+		       \attvaltypnoatt{$\;$}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{back}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{right}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{right}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x$\rightarrow${\sc Head}}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n-1}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{world}$}\\
+		       \attvaltyp{axis}{$\mbox{+X}$}\\
+		       \attvaltyp{arity}{\mbox{x$\rightarrow${\sc Habitat}$\rightarrow$}}\\
+		       \attvaltypnoatt{$\;$}{\sc Intr[$right(axis)$]:}\\
+		       \attvaltypnoatt{$\;$}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{right}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{left}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{left}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x$\rightarrow${\sc Head}}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n-1}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{world}$}\\
+		       \attvaltyp{axis}{$\mbox{-X}$}\\
+		       \attvaltyp{arity}{\mbox{x$\rightarrow${\sc Habitat}$\rightarrow$}}\\
+		       \attvaltypnoatt{$\;$}{\sc Intr[$left(axis)$]:}\\
+		       \attvaltypnoatt{$\;$}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{left}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{center}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{center}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x$\rightarrow${\sc Head}}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):0}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{object}$}\\
+		       \attvaltyp{axis}{$\mbox{nil}$}\\
+		       \attvaltyp{arity}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{center}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{edge}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{edge}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x$\rightarrow${\sc Head}}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):1}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{object}$}\\
+		       \attvaltyp{axis}{$\mbox{(see linked attribute)}$}\\
+		       \attvaltyp{arity}{$(see linked attribute)$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{edge}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{corner}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{corner}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x$\rightarrow${\sc Head}}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):0}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{object}$}\\
+		       \attvaltyp{axis}{$\mbox{(see linked attribute)}$}\\
+		       \attvaltyp{arity}{$(see linked attribute)$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{corner}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{diagonal}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{diagonal}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x$\rightarrow${\sc Head}}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):1}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{object}$}\\
+		       \attvaltyp{axis}{$\mbox{$axes$({\sc referent}$\rightarrow${\sc head}})$}\\
+		       \attvaltyp{arity}{$(see linked attribute)$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{diagonal}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{above}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{above}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{world}$}\\
+		       \attvaltyp{axis}{$\mbox{+Y}$}\\
+		       \attvaltyp{arity}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{above}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{below}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{below}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{world}$}\\
+		       \attvaltyp{axis}{$\mbox{-Y}$}\\
+		       \attvaltyp{arity}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{below}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{in\_front}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{in\_front}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{pov}$}\\
+		       \attvaltyp{axis}{$\mbox{+Z}$}\\
+		       \attvaltyp{arity}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{in_front}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{behind}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{behind}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{pov}$}\\
+		       \attvaltyp{axis}{$\mbox{-Z}$}\\
+		       \attvaltyp{arity}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{behind}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{to\_the\_left}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{to\_the\_left}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{pov}$}\\
+		       \attvaltyp{axis}{$\mbox{-X}$}\\
+		       \attvaltyp{arity}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{to_the_left}}
+
+\enumsentence{
+
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{to\_the\_right}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{to\_the\_right}}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{arg}{\mbox{x:physobj}}\\
+		       \attvaltyp{referent}{\mbox{x}}\\
+		       \attvaltyp{mapping}{\mbox{dimension(n):n}}\\
+		       \attval{orientation}{\avmplus{
+		       \attvaltyp{space}{$\mbox{pov}$}\\
+		       \attvaltyp{axis}{$\mbox{+X}$}\\
+		       \attvaltyp{arity}{$intransitive$}}
+		       }}
+		       }}
+		       $
+}
+\def\baselinestretch{1.9}
+
+\label{to_the_right}}
+
+\enumsentence{
+\def\baselinestretch{1.0}
+{\tiny
+$\avmplus{\att{reach}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{reach}}\\
+                           \attvaltyp{type}{process}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{head}{process}\\
+		         \attval{args}{\avmplus{
+		       \attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+		       \attvaltyp{a$_2$}{$\mbox{y:physobj}$}
+		       }}
+\\
+		       \attval{body}{\avmplus{
+		       \attvaltyp{e$_1$}{$[while(!at(x,y),extend(x,align(loc(y)-loc(x))))]$}
+		       }}  \\
+		}} \\                                
+}$
+\def\baselinestretch{1.9}
+}\label{reach}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{box}\\
+        \attval{lex}{\avmplus{	      
+                          \attvaltyp{pred}{\mbox{box}}\\
+                           \attvaltyp{type}{physobj}
+                          }}\\
+         \attval{type}{\avmplus{
+		       \attvaltyp{head}{rectangular\_prism}\\
+		       \attvaltyp{components}{nil}\\
+		       		       \attvaltyp{concavity}{flat}\\
+		        \attvaltyp{rotatSym}{$\{X,Y,Z\}$} \\
+		         \attvaltyp{reflectSym}{$\{XY,XZ,YZ\}$}
+		       	      
+                          %\attvaltyp{a}{...}
+                          }}  \\
+%          \attval{habitat}{\avmplus{
+%		       \attvaltyp{Intrinsic}{$align(Y,\mathcal{E}_{Y})$}\\
+%		       \attvaltyp{Extrinsic}{...} 
+%                          %\attvaltyp{a}{...}
+%                          }}      \\
+        \attval{habitat}{\avmplus{
+		       \attval{Intr}{...}\\
+                          %\attvaltyp{a}{...}
+                   	       \attval{Extr}{...} 
+                          %\attvaltyp{a}{...}
+                          }}      \\
+
+           \attval{afford\_str}{\avmplus{
+		       \attvaltyp{A$_1$}{$H_1 \rightarrow [E_1] R$ }\\
+		       \attvaltyp{A$_2$}{...}\\
+		        \attvaltyp{A$_3$}{...}	      
+                          %\attvaltyp{a}{...}
+                          }}      \\
+           \attval{embodiment}{\avmplus{
+		       \attvaltyp{scale}{$<$agent}\\
+		       \attvaltyp{movable}{true}
+                          %\attvaltyp{a}{...}
+                          }}                                  
+}$
+\def\baselinestretch{1.9}
+}\label{room12}}
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{push}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{push}}\\
+		\attvaltyp{type}{process}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{process}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:agent}$}\\
+			\attvaltyp{a$_2$}{$\mbox{y:physobj}$}\\
+			\attvaltyp{a$_3$}{$\mbox{z:location}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_1$}{$touch(x,y)$}\\
+			\attvaltyp{e$_2$}{$while(EC(x,y),move(y,toward(z)))$}\\
+			\attvaltyp{e$_3$}{$at(y,z) \rightarrow [detach\_from(x,y)]$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{push}}
+
+
+\subsection{Gestures}
+
+
+\noindent
+
+$\mbox{Gesture} \sqsubseteq \mbox{Program}$
+
+
+\enumsentence{
+{\tiny
+\def\baselinestretch{1.1}
+$\avmplus{\att{GESTURE}\\
+	\attval{lex}{\avmplus{
+		\attvaltyp{pred}{\mbox{...}}\\
+		\attvaltyp{type}{...}
+	}}\\
+	\attval{type}{\avmplus{
+		\attvaltyp{head}{...}\\
+		\attval{args}{\avmplus{
+			\attvaltyp{a$_1$}{$\mbox{x:a}$}
+			%\attvaltyp{a$_1$}{$\mbox{y:a}$}
+		}}\\
+		\attval{body}{\avmplus{
+			\attvaltyp{e$_n$}{$E(a_{1..n})$}
+			%\attvaltyp{e$_n$}{$E(a_{1..n})$}
+		}}
+	}}
+}$
+\def\baselinestretch{1.9}
+}\label{programtemplate}}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc type} & {\tt process, transition\_event} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+\begin{table}[H]
+\def\baselinestretch{1}
+{\small
+\begin{tabular}{|l|l|}
+\hline
+{\sc head} & {\tt state, process, transition,} \\
+& {\tt assignment, test} \\
+\hline
+\end{tabular}
+} 
+\def\baselinestretch{1.9}
+\end{table}
+
+
+
+
+
+
+
+
+\end{document}

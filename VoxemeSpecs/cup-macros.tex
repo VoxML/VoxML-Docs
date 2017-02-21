@@ -1,0 +1,51 @@
+
+{\obeyspaces\gdef {\ }}
+\global\newbox\codebox
+\global\newbox\savedcodebox
+\gdef\sverbatim{\bgroup\def\endsverbatim{\egroup\egroup\egroup\mbox{\box\codebo\
+x}}\def\savecode{\egroup\egroup\egroup\global\setbox\savedcodebox\copy\codebox}\
+\def\par{\egroup\vspace{-0.3em}\hbox\bgroup}\tt\obeylines\obeyspaces\global\set\
+box\codebox\vbox\bgroup\hbox\bgroup}
+\gdef\savedcode{\copy\savedcodebox}
+
+
+%\gdef\message{\bgroup\def\endmessage{\egroup\hrule{.3in}
+%\verbatim\obeylines\obeyspaces\hrule{.3in}}
+
+
+% AVM macros
+\newcommand{\avm}[1]{{\setlength{\arraycolsep}{0.8mm}
+                       \renewcommand{\arraystretch}{1.2}
+                       \left[
+                       \begin{array}{l}
+                       \\[-4mm] #1 \\[-4mm] \\
+                       \end{array}
+                       \right]
+                    }}
+%
+%
+\newcommand{\avmplus}[1]{{\setlength{\arraycolsep}{0.8mm}
+                       \renewcommand{\arraystretch}{1.2}
+                       \left[
+                       \begin{array}{l}
+                       \\[-2mm] #1 \\[-2mm] \\
+                       \end{array}
+                       \right]
+                    }}
+%
+\newcommand{\att}[1]{{\mbox{\small {\bf #1}}}}
+\newcommand{\attval}[2]{{\mbox{\small {\sc #1}}\ =\ {{#2}}}}
+\newcommand{\attvalterm}[2]{{\mbox{\small {\sc #1}}\ =\ {\myvalue{#2}}}}
+\newcommand{\attvaltyp}[2]{{\mbox{\small{\sc #1}}\ =\ {\myvaluebold{#2}}}}
+\newcommand{\attvaltypnoatt}[2]{{\mbox{$\;\;\;\;\;\;\;\;\;\;$} \  \ {\myvaluebold{#2}}}}
+\newcommand{\myvalue}[1]{{\mbox{\normalsize {\it #1}}}}
+\newcommand{\myvaluebold}[1]{{\mbox{\small {\bf #1}}}}
+\newcommand{\ind}[1]{{\setlength{\fboxsep}{0.5mm} \: \fbox{{\tiny #1}} \:}}
+
+\newcommand{\attnoval}[1]{{\mbox{\small {\sc #1}}  }}
+
+%
+\def\implies{\Rightarrow}
+
+ 
+\newcounter{lingex}
